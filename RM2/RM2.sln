@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RM2.WebApi", "RM2.WebApi\RM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RM2.WebApi.Tests", "RM2.WebApi.Tests\RM2.WebApi.Tests.csproj", "{A855E3B0-8857-49B1-9F46-25DDCBA43079}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RM2.Orm", "RM2.Orm\RM2.Orm.csproj", "{AC9A2CF7-C2D8-4385-A66A-B8B7B9413D8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -78,6 +80,10 @@ Global
 		{A855E3B0-8857-49B1-9F46-25DDCBA43079}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A855E3B0-8857-49B1-9F46-25DDCBA43079}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A855E3B0-8857-49B1-9F46-25DDCBA43079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC9A2CF7-C2D8-4385-A66A-B8B7B9413D8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC9A2CF7-C2D8-4385-A66A-B8B7B9413D8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC9A2CF7-C2D8-4385-A66A-B8B7B9413D8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC9A2CF7-C2D8-4385-A66A-B8B7B9413D8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
