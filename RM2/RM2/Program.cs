@@ -15,7 +15,9 @@ namespace RM2
             Console.WriteLine("Hello World!");
             Console.WriteLine("Hello World!");
             Console.WriteLine("Hello World!");
-            Console.WriteLine("Hello 软谋!"); 
+
+            Console.WriteLine("Hello 软谋!");
+            global::System.Console.WriteLine("3哒不点");
         }
     }
 }
