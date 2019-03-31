@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E3A342B7-5720-4933-9FD0-658EBCE82CCC}</ProjectGuid>
+    <ProjectGuid>{AC9A2CF7-C2D8-4385-A66A-B8B7B9413D8E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RM2.Model</RootNamespace>
-    <AssemblyName>RM2.Model</AssemblyName>
+    <RootNamespace>RM2.Orm</RootNamespace>
+    <AssemblyName>RM2.Orm</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,17 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,19 +41,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base_Log.cs" />
-    <Compile Include="Base_Menu.cs" />
-    <Compile Include="Base_Role.cs" />
-    <Compile Include="Base_RoleMenuMap.cs" />
-    <Compile Include="Base_User.cs" />
-    <Compile Include="Base_UserMenuMap.cs" />
-    <Compile Include="Base_UserRoleMap.cs" />
-    <Compile Include="ModelDBContext.cs" />
+    <Compile Include="Attributes\MyColumnAttribute.cs" />
+    <Compile Include="Attributes\MyForeignKeyAttribute.cs" />
+    <Compile Include="Attributes\MyKeyAttribute.cs" />
+    <Compile Include="Attributes\MyTableAttribute.cs" />
+    <Compile Include="Commons\AuditEntity.cs" />
+    <Compile Include="Commons\BaseEntity.cs" />
+    <Compile Include="Commons\DbKvs.cs" />
+    <Compile Include="Commons\FullEntity.cs" />
+    <Compile Include="Commons\ICreateAudit.cs" />
+    <Compile Include="Commons\IEntity.cs" />
+    <Compile Include="Commons\ISoftDelete.cs" />
+    <Compile Include="Commons\IUpdateAudit.cs" />
+    <Compile Include="Expressions\ExpressionExtensions.cs" />
+    <Compile Include="Expressions\IncludePropertySdrMap.cs" />
+    <Compile Include="Expressions\LinqExtensions.cs" />
+    <Compile Include="Expressions\SqlDataReaderConverter.cs" />
+    <Compile Include="Expressions\WhereExpressionVisitor.cs" />
+    <Compile Include="MyDb.cs" />
+    <Compile Include="MyDbUpdate.cs" />
+    <Compile Include="MyMiniOrmConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
+    <Compile Include="Queryable\MyQueryable.cs" />
+    <Compile Include="Reflections\MyEntity.cs" />
+    <Compile Include="Reflections\MyEntityContainer.cs" />
+    <Compile Include="Reflections\MyProperty.cs" />
+    <Compile Include="Reflections\ReflectionExtensions.cs" />
+    <Compile Include="SqlBuilders\AdoExtensions.cs" />
+    <Compile Include="SqlBuilders\ISqlBuilder.cs" />
+    <Compile Include="SqlBuilders\SqlServerSqlBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
