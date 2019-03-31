@@ -93,7 +93,7 @@ namespace RM2.Orm
 
             foreach (var property in includeProperties)
             {
-                parameters.Add(new SqlParameter($"@{property.Name}", property.PropertyInfo.GetValue(entity)));
+                parameters.Add(new SqlParameter($"@{property.Name}", ResolveParameterValue(property.PropertyInfo.GetValue(entity))));
             }
 
             using (var conn = new SqlConnection(_connectionString))
@@ -120,7 +120,7 @@ namespace RM2.Orm
 
             foreach (var property in includeProperties)
             {
-                parameters.Add(new SqlParameter($"@{property.Name}", property.PropertyInfo.GetValue(entity)));
+                parameters.Add(new SqlParameter($"@{property.Name}", ResolveParameterValue(property.PropertyInfo.GetValue(entity))));
             }
 
             using (var conn = new SqlConnection(_connectionString))

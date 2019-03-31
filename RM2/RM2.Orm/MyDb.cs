@@ -27,7 +27,7 @@ namespace RM2.Orm
         {
             if (string.IsNullOrWhiteSpace(MyMiniOrmConfiguration.GetConnectionString()))
             {
-                throw new Exception("RM2.Orm尚未初始化");
+                throw new Exception("MyMiniOrm尚未初始化");
             }
 
             _connectionString = MyMiniOrmConfiguration.GetConnectionString();
@@ -114,7 +114,7 @@ namespace RM2.Orm
             }
 
             return query.ToPageList(pageIndex, pageSize, out recordCount);
-        } 
+        }
         #endregion
 
         #region 创建
@@ -128,7 +128,7 @@ namespace RM2.Orm
             var parameterList = entityInfo
                 .Properties
                 .Where(p => !p.InsertIgnore)
-                .Select(p => new SqlParameter($"{_prefix}{p.Name}", p.PropertyInfo.GetValue(entity)));
+                .Select(p => new SqlParameter($"{_prefix}{p.Name}", ResolveParameterValue(p.PropertyInfo.GetValue(entity))));
 
             var command = new SqlCommand(sql);
             command.Parameters.AddRange(parameterList.ToArray());
@@ -147,7 +147,7 @@ namespace RM2.Orm
         {
             if (where == null)
             {
-                return Insert(entity);
+                return Insert<T>(entity);
             }
             else
             {
@@ -167,8 +167,8 @@ namespace RM2.Orm
                     entityInfo
                         .Properties
                         .Where(p => !p.InsertIgnore)
-                        .Select(p => new SqlParameter($"{_prefix}{p.Name}", p.PropertyInfo.GetValue(entity))));
-
+                        .Select(p => new SqlParameter($"{_prefix}{p.Name}",
+                            ResolveParameterValue(p.PropertyInfo.GetValue(entity)))));
                 var command = new SqlCommand(sql);
                 command.Parameters.AddRange(parameters.ToArray());
 
@@ -206,7 +206,8 @@ namespace RM2.Orm
                                 command.Parameters.AddRange(entityInfo
                                     .Properties
                                     .Where(p => !p.InsertIgnore)
-                                    .Select(p => new SqlParameter($"{_prefix}{p.Name}", p.PropertyInfo.GetValue(entity)))
+                                    .Select(p => new SqlParameter($"{_prefix}{p.Name}",
+                                        ResolveParameterValue(p.PropertyInfo.GetValue(entity))))
                                     .ToArray());
                                 var result = command.ExecuteScalar().ToString();
                                 entity.Id = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
@@ -238,7 +239,8 @@ namespace RM2.Orm
             var parameterList = entityInfo
                 .Properties
                 .Where(p => !p.UpdateIgnore || p.IsKey)
-                .Select(p => new SqlParameter($"{_prefix}{p.Name}", p.PropertyInfo.GetValue(entity)));
+                .Select(p => new SqlParameter($"{_prefix}{p.Name}",
+                    ResolveParameterValue(p.PropertyInfo.GetValue(entity))));
 
             var command = new SqlCommand(sql);
             command.Parameters.AddRange(parameterList.ToArray());
@@ -274,14 +276,15 @@ namespace RM2.Orm
                                 command.Parameters.AddRange(entityInfo
                                     .Properties
                                     .Where(p => !p.UpdateIgnore || p.IsKey)
-                                    .Select(p => new SqlParameter($"{_prefix}{p.Name}", p.PropertyInfo.GetValue(entity)))
+                                    .Select(p => new SqlParameter($"{_prefix}{p.Name}",
+                                        ResolveParameterValue(p.PropertyInfo.GetValue(entity))))
                                     .ToArray());
                                 count += command.ExecuteNonQuery();
                             }
                         }
                         trans.Commit();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
                         trans.Rollback();
                         count = 0;
@@ -311,7 +314,8 @@ namespace RM2.Orm
                 entityInfo
                     .Properties
                     .Where(p => !p.UpdateIgnore || p.IsKey)
-                    .Select(p => new SqlParameter($"{_prefix}{p.Name}", p.PropertyInfo.GetValue(entity))));
+                    .Select(p => new SqlParameter($"{_prefix}{p.Name}",
+                        ResolveParameterValue(p.PropertyInfo.GetValue(entity)))));
 
             var command = new SqlCommand(sql);
             command.Parameters.AddRange(parameters.ToArray());
@@ -399,6 +403,16 @@ namespace RM2.Orm
             {
                 return func.Invoke(conn);
             }
+        }
+
+        private object ResolveParameterValue(object val)
+        {
+            if (val is null)
+            {
+                val = DBNull.Value;
+            }
+
+            return val;
         }
         #endregion
     }
