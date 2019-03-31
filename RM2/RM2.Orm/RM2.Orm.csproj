@@ -60,6 +60,7 @@
     <Compile Include="Expressions\WhereExpressionVisitor.cs" />
     <Compile Include="MyDb.cs" />
     <Compile Include="MyDbUpdate.cs" />
+    <Compile Include="MyMiniOrmConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queryable\MyQueryable.cs" />
     <Compile Include="Reflections\MyEntity.cs" />

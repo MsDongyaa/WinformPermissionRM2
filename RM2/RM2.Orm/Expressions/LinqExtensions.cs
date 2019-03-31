@@ -73,7 +73,7 @@ namespace RM2.Orm.Expressions
             /// <param name="map">The map.</param>
             private ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
             {
-                this._map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
+                _map = map ?? new Dictionary<ParameterExpression, ParameterExpression>();
             }
             /// <summary>
             /// Replaces the parameters.

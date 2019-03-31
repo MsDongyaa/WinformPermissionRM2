@@ -35,45 +35,6 @@ namespace RM2.Orm.Expressions
             }
         }
 
-        public static bool IsDerivedFromParameter(this MemberExpression exp)
-        {
-            return IsDerivedFromParameter(exp, out var p);
-        }
-
-        public static bool IsDerivedFromParameter(this MemberExpression exp, out ParameterExpression p)
-        {
-            p = null;
-            var prevExp = exp.Expression;
-            var memberExp = prevExp as MemberExpression;
-            while (memberExp != null)
-            {
-                prevExp = memberExp.Expression;
-                memberExp = prevExp as MemberExpression;
-            }
-
-            if (prevExp == null)/* 静态属性访问 */
-                return false;
-
-            if (prevExp.NodeType == ExpressionType.Parameter)
-            {
-                p = (ParameterExpression)prevExp;
-                return true;
-            }
-
-            /* 当实体继承于某个接口或类时，会有这种情况 */
-            if (prevExp.NodeType == ExpressionType.Convert)
-            {
-                prevExp = ((UnaryExpression)prevExp).Operand;
-                if (prevExp.NodeType == ExpressionType.Parameter)
-                {
-                    p = (ParameterExpression)prevExp;
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         /// <summary>
         /// 获取MemberExpress的根节点类型，并返回 各个级别的 Member 名称
         /// </summary>

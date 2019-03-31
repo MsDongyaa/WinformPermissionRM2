@@ -1,9 +1,11 @@
 ﻿using RM2.Orm.Reflections;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace RM2.Orm.Expressions
 {
@@ -95,6 +97,17 @@ namespace RM2.Orm.Expressions
                                 typeof(SqlDataReader).GetMethod(methodName) ?? throw new InvalidOperationException(),
                                 Expression.Constant(i));
 
+                            Expression setValueExpression;
+                            if (property.PropertyInfo.PropertyType.IsGenericType &&
+                                property.PropertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                            {
+                                setValueExpression = Expression.Convert(methodCall, property.PropertyInfo.PropertyType);
+                            }
+                            else
+                            {
+                                setValueExpression = methodCall;
+                            }
+
                             //memberBindings.Add(Expression.Bind(property.PropertyInfo, methodCall));
                             memberBindings.Add(
                                 Expression.Bind(
@@ -109,7 +122,7 @@ namespace RM2.Orm.Expressions
                                             typeof(DBNull)
                                         ),
                                         Expression.Default(property.PropertyInfo.PropertyType),
-                                        methodCall
+                                        setValueExpression
                                     )
                                 )
                             );
@@ -142,6 +155,17 @@ namespace RM2.Orm.Expressions
                                     typeof(SqlDataReader).GetMethod(methodName) ?? throw new InvalidOperationException(),
                                     Expression.Constant(mapper.Index));
 
+                                Expression setValueExpression;
+                                if (subProperty.PropertyInfo.PropertyType.IsGenericType &&
+                                    subProperty.PropertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>))
+                                {
+                                    setValueExpression = Expression.Convert(methodCall, subProperty.PropertyInfo.PropertyType);
+                                }
+                                else
+                                {
+                                    setValueExpression = methodCall;
+                                }
+
                                 subBindingList.Add(
                                     Expression.Bind(
                                         subProperty.PropertyInfo,
@@ -154,7 +178,7 @@ namespace RM2.Orm.Expressions
                                                 typeof(DBNull)
                                             ),
                                             Expression.Default(subProperty.PropertyInfo.PropertyType),
-                                            methodCall
+                                            setValueExpression
                                         )
                                     )
                                 );
@@ -229,37 +253,49 @@ namespace RM2.Orm.Expressions
         /// <returns></returns>
         private string GetSdrMethodName(Type type)
         {
+            var realType = GetRealType(type);
             string methodName;
-            if (type == typeof(string))
+
+            if (realType == typeof(string))
             {
                 methodName = "GetString";
             }
-            else if (type == typeof(int))
+            else if (realType == typeof(int))
             {
                 methodName = "GetInt32";
             }
-            else if (type == typeof(DateTime))
+            else if (realType == typeof(DateTime))
             {
                 methodName = "GetDateTime";
             }
-            else if (type == typeof(decimal))
+            else if (realType == typeof(decimal))
             {
                 methodName = "GetDecimal";
             }
-            else if (type == typeof(Guid))
+            else if (realType == typeof(Guid))
             {
                 methodName = "GetGuid";
             }
-            else if (type == typeof(bool))
+            else if (realType == typeof(bool))
             {
                 methodName = "GetBoolean";
             }
             else
             {
-                throw new ArgumentException("不受支持的类型");
+                throw new ArgumentException($"不受支持的类型:{type.FullName}");
             }
 
             return methodName;
+        }
+
+        private static Type GetRealType(Type type)
+        {
+            var realType = type.IsGenericType &&
+                           type.GetGenericTypeDefinition() == typeof(Nullable<>)
+                ? type.GetGenericArguments()[0]
+                : type;
+
+            return realType;
         }
         #endregion
     }
