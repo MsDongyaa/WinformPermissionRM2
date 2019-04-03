@@ -1,7 +1,7 @@
-﻿using RM2.Orm.Attributes;
+﻿using MyMiniOrm.Attributes;
 using System.Reflection;
 
-namespace RM2.Orm.Reflections
+namespace MyMiniOrm.Reflections
 {
     public static class ReflectionExtensions
     {

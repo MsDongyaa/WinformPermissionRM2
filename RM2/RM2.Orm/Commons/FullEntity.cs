@@ -1,4 +1,4 @@
-﻿namespace RM2.Orm.Commons
+﻿namespace MyMiniOrm.Commons
 {
     public class FullEntity : AuditEntity, ISoftDelete
     {

@@ -1,4 +1,4 @@
-﻿namespace RM2.Orm.Expressions
+﻿namespace MyMiniOrm.Expressions
 {
     public class IncludePropertySdrMap
     {

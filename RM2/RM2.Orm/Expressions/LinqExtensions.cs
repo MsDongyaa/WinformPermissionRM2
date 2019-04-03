@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace RM2.Orm.Expressions
+namespace MyMiniOrm.Expressions
 {
     public static class LinqExtensions
     {
@@ -25,8 +25,28 @@ namespace RM2.Orm.Expressions
         {
             return Expression.Lambda<T>(body, parameters);
         }
-        public static Expression<Func<T, bool>> True<T>() { return param => true; }
-        public static Expression<Func<T, bool>> False<T>() { return param => false; }
+
+        public static Expression<Func<T, bool>> Empty<T>()
+        {
+            return param => DefaultTrue();
+        }
+
+        public static Expression<Func<T, bool>> True<T>()
+        {
+            return param => DefaultTrue();
+        }
+
+        public static Expression<Func<T, bool>> False<T>() { return param => DefaultFalse(); }
+
+        private static bool DefaultTrue()
+        {
+            return true;
+        }
+
+        private static bool DefaultFalse()
+        {
+            return false;
+        }
         /// <summary>
         /// 组合And
         /// </summary>
@@ -68,7 +88,7 @@ namespace RM2.Orm.Expressions
             readonly Dictionary<ParameterExpression, ParameterExpression> _map;
             /// <inheritdoc />
             /// <summary>
-            /// Initializes a new instance of the <see cref="T:RM2.Orm.Expressions.LinqExtensions.ParameterRebinder" /> class.
+            /// Initializes a new instance of the <see cref="T:MyMiniOrm.Expressions.LinqExtensions.ParameterRebinder" /> class.
             /// </summary>
             /// <param name="map">The map.</param>
             private ParameterRebinder(Dictionary<ParameterExpression, ParameterExpression> map)
