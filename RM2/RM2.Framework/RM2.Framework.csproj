@@ -65,6 +65,11 @@
     <Compile Include="IceAop\IAopBehavior.cs" />
     <Compile Include="IceAop\IceExceptionBehavior.cs" />
     <Compile Include="IceAop\TestAopBehavior.cs" />
+    <Compile Include="IceFilterAop\AOPManager.cs" />
+    <Compile Include="IceFilterAop\IBaseController.cs" />
+    <Compile Include="IceFilterAop\LogFilterAttribute.cs" />
+    <Compile Include="IceFilterAop\OrderService.cs" />
+    <Compile Include="IceFilterAop\IOrderService.cs" />
     <Compile Include="Ice\CryptoMD5.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

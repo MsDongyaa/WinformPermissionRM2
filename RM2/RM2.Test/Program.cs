@@ -1,4 +1,5 @@
 ﻿using RM2.Framework.IceAop;
+using RM2.Framework.IceFilterAop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,15 @@ namespace RM2.Test
         static void Main(string[] args)
         {
             Console.WriteLine("控制台测试程序");
-            IAopBehavior aopBehavior = AopExtend.Container().Resolve<IAopBehavior>();
-            aopBehavior.Show();
+            //{
+            //    IAopBehavior aopBehavior = AopExtend.Container().Resolve<IAopBehavior>();
+            //    aopBehavior.Show();
+            //}
+
+            {
+                AOPManager.Index("OrderService", "Index",new object[] { 999,"毕妍婷"});
+            }
+
             Console.Read();
         }
     }
