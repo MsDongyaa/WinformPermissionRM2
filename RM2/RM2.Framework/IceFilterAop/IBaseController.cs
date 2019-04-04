@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RM2.Service
+namespace RM2.Framework.IceFilterAop
 {
-    public class Class1
+    /// <summary>
+    /// 空接口
+    /// </summary>
+    public interface IBaseController
     {
+
     }
 }

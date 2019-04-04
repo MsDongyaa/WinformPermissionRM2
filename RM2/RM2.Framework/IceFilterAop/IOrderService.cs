@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RM2.Busines
+namespace RM2.Framework.IceFilterAop
 {
-    public class Class1
+   public interface IOrderService
     {
+        void Index(int id,string name);
     }
 }
