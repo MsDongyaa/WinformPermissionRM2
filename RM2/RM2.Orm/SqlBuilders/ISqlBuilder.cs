@@ -1,7 +1,7 @@
-﻿using RM2.Orm.Commons;
-using RM2.Orm.Reflections;
+﻿using MyMiniOrm.Commons;
+using MyMiniOrm.Reflections;
 
-namespace RM2.Orm.SqlBuilders
+namespace MyMiniOrm.SqlBuilders
 {
     public interface ISqlBuilder
     {

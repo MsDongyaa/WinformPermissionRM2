@@ -1,15 +1,15 @@
-﻿using RM2.Orm.Commons;
-using RM2.Orm.Expressions;
-using RM2.Orm.Queryable;
-using RM2.Orm.Reflections;
-using RM2.Orm.SqlBuilders;
+﻿using MyMiniOrm.Commons;
+using MyMiniOrm.Expressions;
+using MyMiniOrm.Queryable;
+using MyMiniOrm.Reflections;
+using MyMiniOrm.SqlBuilders;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace RM2.Orm
+namespace MyMiniOrm
 {
     public partial class MyDb
     {
@@ -34,28 +34,57 @@ namespace RM2.Orm
             _prefix = MyMiniOrmConfiguration.GetPrefix();
         }
 
+        /// <summary>
+        /// 使用默认配置，返回新MyDb实例
+        /// </summary>
+        /// <returns></returns>
         public static MyDb New()
         {
             return new MyDb();
         }
 
+        /// <summary>
+        /// 返回新MyDb实例
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="prefix"></param>
+        /// <returns></returns>
         public static MyDb New(string connectionString, string prefix = "@")
         {
             return new MyDb(connectionString, prefix);
         }
 
         #region 查找
+        /// <summary>
+        /// 返回MyQueryable实例
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>实体，若记录为空，返回default(T)</returns>
         public MyQueryable<T> Query<T>() where T : class, IEntity, new()
         {
             return new MyQueryable<T>(_connectionString);
         }
 
+        /// <summary>
+        /// 根据ID加载一个实体
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id">实体ID</param>
+        /// <returns>实体，若记录为空，返回default(T)</returns>
         public T Load<T>(int id) where T : class, IEntity, new()
         {
-            return new MyQueryable<T>(_connectionString).Where(t => t.Id == id).FirstOrDefault();
+            return new MyQueryable<T>(_connectionString).Where(t => t.ID == id).FirstOrDefault();
         }
 
-        public T Load<T>(Expression<Func<T, bool>> where = null, params Expression<Func<T, object>>[] orderBy) where T : class, new()
+        /// <summary>
+        /// 根据条件加载一个实体
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="where">查询条件</param>
+        /// <param name="orderBy">排序字段</param>
+        /// <param name="dbSort">正序或倒序</param>
+        /// <returns>实体，若记录为空，返回default(T)</returns>
+        public T Load<T>(Expression<Func<T, bool>> where = null, Expression<Func<T, object>> orderBy = null, MyDbSort dbSort = MyDbSort.Asc) where T : class, new()
         {
             var query = new MyQueryable<T>(_connectionString);
             if (where != null)
@@ -63,18 +92,30 @@ namespace RM2.Orm
                 query.Where(where);
             }
 
-            if (orderBy.Length > 0)
+            if (orderBy != null)
             {
-                foreach (var ob in orderBy)
+                if (dbSort == MyDbSort.Desc)
                 {
-                    query.OrderBy(ob);
+                    query.OrderByDesc(orderBy);
+                }
+                else
+                {
+                    query.OrderBy(orderBy);
                 }
             }
 
             return query.FirstOrDefault();
         }
 
-        public List<T> Fetch<T>(Expression<Func<T, bool>> where = null, params Expression<Func<T, object>>[] orderBy) where T : class, new()
+        /// <summary>
+        /// 根据条件加载所有实体
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="where">查询条件</param>
+        /// <param name="orderBy">排序字段</param>
+        /// <param name="dbSort">正序或倒序</param>
+        /// <returns>实体列表</returns>
+        public List<T> Fetch<T>(Expression<Func<T, bool>> where = null, Expression<Func<T, object>> orderBy = null, MyDbSort dbSort = MyDbSort.Asc) where T : class, new()
         {
             var query = new MyQueryable<T>(_connectionString);
             if (where != null)
@@ -82,22 +123,38 @@ namespace RM2.Orm
                 query.Where(where);
             }
 
-            if (orderBy.Length > 0)
+            if (orderBy != null)
             {
-                foreach (var ob in orderBy)
+                if (dbSort == MyDbSort.Desc)
                 {
-                    query.OrderBy(ob);
+                    query.OrderByDesc(orderBy);
+                }
+                else
+                {
+                    query.OrderBy(orderBy);
                 }
             }
 
             return query.ToList();
         }
 
+        /// <summary>
+        /// 加载分页列表
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="pageIndex">当前页码</param>
+        /// <param name="pageSize">每页条数</param>
+        /// <param name="recordCount">记录总数</param>
+        /// <param name="where">查询条件</param>
+        /// <param name="orderBy">排序字段</param>
+        /// <param name="dbSort">正序或倒序</param>
+        /// <returns>实体列表，输出记录总数</returns>
         public List<T> PageList<T>(int pageIndex,
             int pageSize,
             out int recordCount,
             Expression<Func<T, bool>> where = null,
-            params Expression<Func<T, object>>[] orderBy) where T : class, new()
+            Expression<Func<T, object>> orderBy = null,
+            MyDbSort dbSort = MyDbSort.Asc) where T : class, new()
         {
             var query = new MyQueryable<T>(_connectionString);
             if (where != null)
@@ -105,11 +162,15 @@ namespace RM2.Orm
                 query.Where(where);
             }
 
-            if (orderBy.Length > 0)
+            if (orderBy != null)
             {
-                foreach (var ob in orderBy)
+                if (dbSort == MyDbSort.Desc)
                 {
-                    query.OrderBy(ob);
+                    query.OrderByDesc(orderBy);
+                }
+                else
+                {
+                    query.OrderBy(orderBy);
                 }
             }
 
@@ -118,6 +179,12 @@ namespace RM2.Orm
         #endregion
 
         #region 创建
+        /// <summary>
+        /// 创建一个实体，新的记录Id将绑定到entity的Id属性
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity">要创建的实体</param>
+        /// <returns>新生成记录的ID，若失败返回0</returns>
         public int Insert<T>(T entity) where T : class, IEntity, new()
         {
             var entityInfo = MyEntityContainer.Get(typeof(T));
@@ -138,25 +205,37 @@ namespace RM2.Orm
                 conn.Open();
                 command.Connection = conn;
                 var result = command.ExecuteScalar().ToString();
-                entity.Id = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
-                return entity.Id;
+                entity.ID = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
+                return entity.ID;
             }
         }
 
-        public int InsertIfNotExist<T>(T entity, Expression<Func<T, bool>> where) where T : class, IEntity, new()
+        /// <summary>
+        /// 如果不满足条件则创建一个实体，
+        /// 如限制用户名不能重复 InsertIfNotExist(user, u => u.Name == user.Name)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity">要创建的实体</param>
+        /// <param name="where">条件</param>
+        /// <returns>新生成记录的ID，若失败返回0</returns>
+        public int InsertIfNotExists<T>(T entity, Expression<Func<T, bool>> where) where T : class, IEntity, new()
         {
             if (where == null)
             {
-                return Insert<T>(entity);
+                return Insert(entity);
             }
             else
             {
                 var entityInfo = MyEntityContainer.Get(typeof(T));
-                var whereExpressionVisitor = new WhereExpressionVisitor<T>(entityInfo);
-                whereExpressionVisitor.Visit(where);
+                //var whereExpressionVisitor = new WhereExpressionVisitor<T>(entityInfo);
+                //whereExpressionVisitor.Visit(where);
+                //var condition = whereExpressionVisitor.GetCondition();
+                //var parameters = whereExpressionVisitor.GetParameters().ToSqlParameters();
 
-                var condition = whereExpressionVisitor.GetCondition();
-                var parameters = whereExpressionVisitor.GetParameters().ToSqlParameters();
+                var resolver = new ConditionResolver(entityInfo);
+                resolver.Resolve(where.Body);
+                var condition = resolver.GetCondition();
+                var parameters = resolver.GetParameters().ToSqlParameters();
 
                 condition = string.IsNullOrWhiteSpace(condition) ? "1=1" : condition;
 
@@ -177,12 +256,18 @@ namespace RM2.Orm
                     conn.Open();
                     command.Connection = conn;
                     var result = command.ExecuteScalar().ToString();
-                    entity.Id = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
-                    return entity.Id;
+                    entity.ID = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
+                    return entity.ID;
                 }
             }
         }
 
+        /// <summary>
+        /// 批量创建实体，注意此方法效率不高
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entityList">实体列表</param>
+        /// <returns>受影响的记录数</returns>
         public int Insert<T>(List<T> entityList) where T : class, IEntity, new()
         {
             var entityInfo = MyEntityContainer.Get(typeof(T));
@@ -210,7 +295,7 @@ namespace RM2.Orm
                                         ResolveParameterValue(p.PropertyInfo.GetValue(entity))))
                                     .ToArray());
                                 var result = command.ExecuteScalar().ToString();
-                                entity.Id = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
+                                entity.ID = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
                                 count++;
                             }
                         }
@@ -229,6 +314,12 @@ namespace RM2.Orm
         #endregion
 
         #region 更新
+        /// <summary>
+        /// 更新一个实体
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity">要更新的实体</param>
+        /// <returns>受影响的记录数</returns>
         public int Update<T>(T entity) where T : class, IEntity, new()
         {
             var entityInfo = MyEntityContainer.Get(typeof(T));
@@ -253,6 +344,12 @@ namespace RM2.Orm
             }
         }
 
+        /// <summary>
+        /// 更新多个实体
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entityList">要更新的实体列表</param>
+        /// <returns>受影响的记录数</returns>
         public int Update<T>(List<T> entityList) where T : class, IEntity, new()
         {
             var entityInfo = MyEntityContainer.Get(typeof(T));
@@ -284,7 +381,7 @@ namespace RM2.Orm
                         }
                         trans.Commit();
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         trans.Rollback();
                         count = 0;
@@ -295,14 +392,27 @@ namespace RM2.Orm
             return count;
         }
 
-        public int UpdateIfNotExit<T>(T entity, Expression<Func<T, bool>> where)
+        /// <summary>
+        /// 如果不存在，则更新
+        /// 如：UpdateIfNotExists(user, u=>u.Name == user.Name && u.Id != user.Id)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="where"></param>
+        /// <returns>受影响的记录数</returns>
+        public int UpdateIfNotExits<T>(T entity, Expression<Func<T, bool>> where)
         {
             var entityInfo = MyEntityContainer.Get(typeof(T));
-            var whereExpressionVisitor = new WhereExpressionVisitor<T>(entityInfo);
-            whereExpressionVisitor.Visit(where);
 
-            var condition = whereExpressionVisitor.GetCondition();
-            var parameters = whereExpressionVisitor.GetParameters().ToSqlParameters();
+            //var whereExpressionVisitor = new WhereExpressionVisitor<T>(entityInfo);
+            //whereExpressionVisitor.Visit(where);
+            //var condition = whereExpressionVisitor.GetCondition();
+            //var parameters = whereExpressionVisitor.GetParameters().ToSqlParameters();
+
+            var resolver = new ConditionResolver(entityInfo);
+            resolver.Resolve(where.Body);
+            var condition = resolver.GetCondition();
+            var parameters = resolver.GetParameters().ToSqlParameters();
 
             condition = string.IsNullOrWhiteSpace(condition) ? "1=1" : condition;
 
@@ -331,28 +441,114 @@ namespace RM2.Orm
 
         #region 删除
 
-        public int Delete<T>(int id) where T : class, IEntity, new()
+        /// <summary>
+        /// 根据ID删除记录，如果支持软删除并且非强制删除，则更新IsDel字段为true，否则，删除记录
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id">要删除的实体ID</param>
+        /// <param name="isForce">是否强制删除，默认为false</param>
+        /// <returns>受影响的记录数</returns>
+        public int Delete<T>(int id, bool isForce = false) where T : class, IEntity, new()
         {
             var entityInfo = MyEntityContainer.Get(typeof(T));
-            var sql = $"DELETE [{entityInfo.TableName}] WHERE [{entityInfo.KeyColumn}]={_prefix}Id";
-            using (var conn = new SqlConnection(_connectionString))
+            if (isForce || !entityInfo.IsSoftDelete)
             {
-                conn.Open();
-                var command = new SqlCommand(sql, conn);
-                command.Parameters.AddWithValue($"{_prefix}Id", id);
-                return command.ExecuteNonQuery();
+                var sql = $"DELETE [{entityInfo.TableName}] WHERE [{entityInfo.KeyColumn}]={_prefix}Id";
+                using (var conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    var command = new SqlCommand(sql, conn);
+                    command.Parameters.AddWithValue($"{_prefix}Id", id);
+                    return command.ExecuteNonQuery();
+                }
+            }
+            else
+            {
+                var sql = $"UPDATE [{entityInfo.TableName}] SET IsDel=1 WHERE [{entityInfo.KeyColumn}]={_prefix}Id";
+                using (var conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    var command = new SqlCommand(sql, conn);
+                    command.Parameters.AddWithValue($"{_prefix}Id", id);
+                    return command.ExecuteNonQuery();
+                }
             }
         }
 
-        public int Delete<T>(IEnumerable<int> idList) where T : class, IEntity, new()
+        /// <summary>
+        /// 根据ID批量删除记录，如果支持软删除并且非强制删除，则更新IsDel字段为true，否则，删除记录
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="idList">要删除的ID列表</param>
+        /// <param name="isForce">是否强制删除，默认为false</param>
+        /// <returns>受影响的记录数</returns>
+        public int Delete<T>(IEnumerable<int> idList, bool isForce = false) where T : class, IEntity, new()
         {
             var entityInfo = MyEntityContainer.Get(typeof(T));
-            var sql = $"EXEC('DELETE [{entityInfo.TableName}] WHERE [{entityInfo.KeyColumn}] in ('+{_prefix}Ids+')')";
+            if (isForce || !entityInfo.IsSoftDelete)
+            {
+                var sql =
+                    $"EXEC('DELETE [{entityInfo.TableName}] WHERE [{entityInfo.KeyColumn}] in ('+{_prefix}Ids+')')";
+                using (var conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    var command = new SqlCommand(sql, conn);
+                    command.Parameters.AddWithValue($"{_prefix}Ids", string.Join(",", idList));
+                    return command.ExecuteNonQuery();
+                }
+            }
+            else
+            {
+                var sql = $"EXEC('UPDATE [{entityInfo.TableName}] SET IsDel=1 WHERE [{entityInfo.KeyColumn}] in ('+{_prefix}Ids+')')";
+                using (var conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    var command = new SqlCommand(sql, conn);
+                    command.Parameters.AddWithValue($"{_prefix}Id", idList);
+                    return command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 根据条件删除记录，如果支持软删除并且非强制删除，则更新IsDel字段为true，否则，删除记录
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="expression">条件，注意不支持导航属性及其子属性</param>
+        /// <param name="isForce">是否强制删除</param>
+        /// <returns>受影响的记录数</returns>
+        public int Delete<T>(Expression<Func<T, bool>> expression, bool isForce) where T : IEntity
+        {
+            var entityInfo = MyEntityContainer.Get(typeof(T));
+
+            //var whereExpressionVisitor = new WhereExpressionVisitor<T>();
+            //whereExpressionVisitor.Visit(expression);
+            //var where = whereExpressionVisitor.GetCondition();
+            //var whereParameters = whereExpressionVisitor.GetParameters().ToSqlParameters();
+
+            var resolver = new ConditionResolver(entityInfo);
+            resolver.Resolve(expression.Body);
+            var condition = resolver.GetCondition();
+            var parameters = resolver.GetParameters().ToSqlParameters();
+
+            condition = string.IsNullOrWhiteSpace(condition) ? "1=1" : condition;
+            string sql;
+            if (isForce || !entityInfo.IsSoftDelete)
+            {
+                sql =
+                    $"DELETE [{entityInfo.TableName}] WHERE {condition}";
+            }
+            else
+            {
+                sql =
+                    $"UPDATE [{entityInfo.TableName}] SET IsDel=1 WHERE {condition}";
+            }
+
             using (var conn = new SqlConnection(_connectionString))
             {
                 conn.Open();
                 var command = new SqlCommand(sql, conn);
-                command.Parameters.AddWithValue($"{_prefix}Ids", string.Join(",", idList));
+                command.Parameters.AddRange(parameters.ToArray());
                 return command.ExecuteNonQuery();
             }
         }
@@ -376,10 +572,15 @@ namespace RM2.Orm
             }
             else
             {
-                var whereExpressionVisitor = new WhereExpressionVisitor<T>();
-                whereExpressionVisitor.Visit(expression);
-                var condition = whereExpressionVisitor.GetCondition();
-                var parameters = whereExpressionVisitor.GetParameters();
+                //var whereExpressionVisitor = new WhereExpressionVisitor<T>();
+                //whereExpressionVisitor.Visit(expression);
+                //var condition = whereExpressionVisitor.GetCondition();
+                //var parameters = whereExpressionVisitor.GetParameters().ToSqlParameters();
+
+                var resolver = new ConditionResolver(entityInfo);
+                resolver.Resolve(expression.Body);
+                var condition = resolver.GetCondition();
+                var parameters = resolver.GetParameters().ToSqlParameters();
 
                 condition = string.IsNullOrWhiteSpace(condition) ? "1=1" : condition;
 
@@ -388,7 +589,7 @@ namespace RM2.Orm
                 {
                     conn.Open();
                     var command = new SqlCommand(sql, conn);
-                    command.Parameters.AddRange(parameters.ToSqlParameters().ToArray());
+                    command.Parameters.AddRange(parameters.ToArray());
                     return (int)command.ExecuteScalar();
                 }
             }
@@ -396,14 +597,6 @@ namespace RM2.Orm
         #endregion
 
         #region 私有方法
-
-        private TResult Exec<TResult>(Func<SqlConnection, TResult> func)
-        {
-            using (var conn = new SqlConnection(_connectionString))
-            {
-                return func.Invoke(conn);
-            }
-        }
 
         private object ResolveParameterValue(object val)
         {

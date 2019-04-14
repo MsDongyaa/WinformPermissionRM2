@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RM2.Orm.Attributes
+namespace MyMiniOrm.Attributes
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class MyColumnAttribute : Attribute

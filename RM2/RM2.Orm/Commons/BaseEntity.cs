@@ -1,7 +1,7 @@
-﻿namespace RM2.Orm.Commons
+﻿namespace MyMiniOrm.Commons
 {
     public class BaseEntity : IEntity
     {
-        public virtual int Id { get; set; }
+        public virtual int ID { get; set; }
     }
 }

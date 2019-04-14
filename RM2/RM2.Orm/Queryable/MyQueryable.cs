@@ -1,6 +1,6 @@
-﻿using RM2.Orm.Expressions;
-using RM2.Orm.Reflections;
-using RM2.Orm.SqlBuilders;
+﻿using MyMiniOrm.Expressions;
+using MyMiniOrm.Reflections;
+using MyMiniOrm.SqlBuilders;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace RM2.Orm.Queryable
+namespace MyMiniOrm.Queryable
 {
     public class MyQueryable<T> where T : class , new ()
     {
@@ -38,6 +38,10 @@ namespace RM2.Orm.Queryable
 
         // 拼接好的order by子句
         private string _orderBy;
+
+        private Func<T, object> _func;
+
+        public delegate TResult ObjectConvertor<out TResult>(T input);
 
         // 构造方法
         public MyQueryable(string connectionString)
@@ -77,11 +81,17 @@ namespace RM2.Orm.Queryable
             }
             _hasInitWhere = true;
 
-            var whereExpressionVisitor = new WhereExpressionVisitor<T>(_masterEntity);
-            whereExpressionVisitor.Visit(expr);
-            _where = whereExpressionVisitor.GetCondition();
-            _whereParameters = whereExpressionVisitor.GetParameters();
-            _whereProperties = whereExpressionVisitor.GetJoinPropertyList();
+            //var whereExpressionVisitor = new WhereExpressionVisitor<T>(_masterEntity);
+            //whereExpressionVisitor.Visit(expr);
+            //_where = whereExpressionVisitor.GetCondition();
+            //_whereParameters = whereExpressionVisitor.GetParameters();
+            //_whereProperties = whereExpressionVisitor.GetJoinPropertyList();
+
+            var condition = new ConditionResolver(_masterEntity);
+            condition.Resolve(expr.Body);
+            _where = condition.GetCondition();
+            _whereParameters = condition.GetParameters();
+            _whereProperties = condition.GetJoinPropertyList();
 
             return this;
         }
@@ -207,6 +217,13 @@ namespace RM2.Orm.Queryable
                 var handler = new SqlDataReaderConverter<T>(_includeProperties.ToArray());
                 return handler.ConvertToEntity2(sdr);
             }
+        }
+
+        public MyQueryable<T> Select<TResult>(Expression<Func<T, TResult>> expression)
+        {
+            var func = expression.Compile();
+            //_func = func;
+            return this;
         }
         #endregion
 

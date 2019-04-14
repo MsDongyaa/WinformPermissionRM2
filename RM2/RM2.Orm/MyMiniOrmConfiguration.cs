@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RM2.Orm
+namespace MyMiniOrm
 {
     public class MyMiniOrmConfiguration
     {
@@ -18,7 +18,7 @@ namespace RM2.Orm
         {
             if (_hasInit)
             {
-                throw new Exception("RM2.Orm只能初始化一次");
+                throw new Exception("MyMiniOrm只能初始化一次");
             }
 
             _defaultConnectionString = connectionString;

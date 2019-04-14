@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace RM2.Orm.Reflections
+namespace MyMiniOrm.Reflections
 {
     public class MyProperty
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace RM2.Orm.SqlBuilders
+namespace MyMiniOrm.SqlBuilders
 {
     public static class AdoExtensions
     {
