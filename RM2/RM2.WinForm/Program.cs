@@ -1,4 +1,5 @@
 ﻿using RM2.Framework;
+using RM2.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,10 @@ namespace RM2.WinForm
         [STAThread]
         static void Main()
         {
+            dbUtil.dbinit();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
-            dbUtil.dbinit();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using RM2.Orm;
+﻿using MyMiniOrm;
+using MyMiniOrm.Commons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,8 @@ namespace RM2.Framework
         public static MyDb _myDb = null;
         public static void dbinit()
         {
-            _myDb = new MyDb("DataSource=.;Database=RM2;USER ID=sa;Password=619239652");
+            
+            _myDb = new MyDb("Data Source = .;Initial Catalog = RM2;User Id = sa;Password = 619239652;");
         }
     }
 }

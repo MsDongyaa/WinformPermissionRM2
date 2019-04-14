@@ -1,5 +1,6 @@
 namespace RM2.Model
 {
+    using MyMiniOrm.Commons;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ namespace RM2.Model
     /// <summary>
     /// 用户菜单映射表
     /// </summary>
-    public partial class Base_UserMenuMap
+    public partial class Base_UserMenuMap : IEntity
     {
         /// <summary>
         /// 主键ID

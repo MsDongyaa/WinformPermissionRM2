@@ -1,5 +1,7 @@
 namespace RM2.Model
 {
+    using MyMiniOrm.Attributes;
+    using MyMiniOrm.Commons;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -8,7 +10,7 @@ namespace RM2.Model
     /// <summary>
     /// 角色菜单映射表
     /// </summary>
-    public partial class Base_RoleMenuMap
+    public partial class Base_RoleMenuMap : IEntity
     {
         /// <summary>
         /// 主键ID
@@ -18,10 +20,15 @@ namespace RM2.Model
         /// <summary>
         /// 菜单ID
         /// </summary>
+    
         public int? MenuID { get; set; }
+        [MyForeignKey("MenuID")]
+        public Base_Menu Menu { get; set; }
         /// <summary>
         /// 角色ID
         /// </summary>
         public int? RoleID { get; set; }
+        [MyForeignKey("RoleID")]
+        public Base_Menu Role { get; set; }
     }
 }
