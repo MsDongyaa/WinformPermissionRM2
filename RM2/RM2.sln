@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RM2.Orm", "RM2.Orm\RM2.Orm.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RM2.Test", "RM2.Test\RM2.Test.csproj", "{24B38945-62C8-46DD-884C-CB56575DA42E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RM2.WinForm", "RM2.WinForm\RM2.WinForm.csproj", "{68B4CCAF-4578-4E93-BCD0-E6D711FDE16E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,10 @@ Global
 		{24B38945-62C8-46DD-884C-CB56575DA42E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24B38945-62C8-46DD-884C-CB56575DA42E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24B38945-62C8-46DD-884C-CB56575DA42E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68B4CCAF-4578-4E93-BCD0-E6D711FDE16E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68B4CCAF-4578-4E93-BCD0-E6D711FDE16E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68B4CCAF-4578-4E93-BCD0-E6D711FDE16E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68B4CCAF-4578-4E93-BCD0-E6D711FDE16E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

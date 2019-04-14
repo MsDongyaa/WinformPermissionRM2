@@ -1,7 +1,9 @@
-﻿namespace RM2.Orm.Commons
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RM2.Orm.Commons
 {
     public interface IEntity
     {
-        int Id { get; set; }
+        int ID { get; set; }
     }
 }

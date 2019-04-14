@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="dbUtil.cs" />
     <Compile Include="IceAop\AopExtend.cs" />
     <Compile Include="IceAop\IAopBehavior.cs" />
     <Compile Include="IceAop\IceExceptionBehavior.cs" />
@@ -83,6 +84,12 @@
     <None Include="Ice\AOP实现文档及调用.docx" />
     <None Include="packages.config" />
     <None Include="Seven\本地日志以及序列化使用.docx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RM2.Orm\RM2.Orm.csproj">
+      <Project>{AC9A2CF7-C2D8-4385-A66A-B8B7B9413D8E}</Project>
+      <Name>RM2.Orm</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

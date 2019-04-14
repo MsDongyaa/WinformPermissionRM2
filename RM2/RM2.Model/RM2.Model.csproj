@@ -57,12 +57,19 @@
     <Compile Include="Base_User.cs" />
     <Compile Include="Base_UserMenuMap.cs" />
     <Compile Include="Base_UserRoleMap.cs" />
+    <Compile Include="BusinesModel\PageModel.cs" />
     <Compile Include="ModelDBContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RM2.Orm\RM2.Orm.csproj">
+      <Project>{AC9A2CF7-C2D8-4385-A66A-B8B7B9413D8E}</Project>
+      <Name>RM2.Orm</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
