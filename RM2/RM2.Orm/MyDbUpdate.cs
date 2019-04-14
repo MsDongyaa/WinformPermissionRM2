@@ -122,7 +122,7 @@ namespace MyMiniOrm
 
             var sql =
                 $"UPDATE [{entityInfo.TableName}] SET {string.Join(",", includeProperties.Select(p => $"{p.FieldName}=@{p.Name}"))} WHERE Id=@Id";
-            var parameters = new List<SqlParameter> { new SqlParameter("@Id", entity.Id) };
+            var parameters = new List<SqlParameter> { new SqlParameter("@Id", entity.ID) };
 
             foreach (var property in includeProperties)
             {
@@ -180,7 +180,7 @@ namespace MyMiniOrm
 
             var sql =
                 $"UPDATE [{entityInfo.TableName}] SET {string.Join(",", includeProperties.Select(p => $"{p.FieldName}=@{p.Name}"))} WHERE Id=@Id";
-            var parameters = new List<SqlParameter> { new SqlParameter("@Id", entity.Id) };
+            var parameters = new List<SqlParameter> { new SqlParameter("@Id", entity.ID) };
 
             foreach (var property in includeProperties)
             {

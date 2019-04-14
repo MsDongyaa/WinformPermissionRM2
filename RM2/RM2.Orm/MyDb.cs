@@ -73,7 +73,7 @@ namespace MyMiniOrm
         /// <returns>实体，若记录为空，返回default(T)</returns>
         public T Load<T>(int id) where T : class, IEntity, new()
         {
-            return new MyQueryable<T>(_connectionString).Where(t => t.Id == id).FirstOrDefault();
+            return new MyQueryable<T>(_connectionString).Where(t => t.ID == id).FirstOrDefault();
         }
 
         /// <summary>
@@ -205,8 +205,8 @@ namespace MyMiniOrm
                 conn.Open();
                 command.Connection = conn;
                 var result = command.ExecuteScalar().ToString();
-                entity.Id = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
-                return entity.Id;
+                entity.ID = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
+                return entity.ID;
             }
         }
 
@@ -256,8 +256,8 @@ namespace MyMiniOrm
                     conn.Open();
                     command.Connection = conn;
                     var result = command.ExecuteScalar().ToString();
-                    entity.Id = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
-                    return entity.Id;
+                    entity.ID = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
+                    return entity.ID;
                 }
             }
         }
@@ -295,7 +295,7 @@ namespace MyMiniOrm
                                         ResolveParameterValue(p.PropertyInfo.GetValue(entity))))
                                     .ToArray());
                                 var result = command.ExecuteScalar().ToString();
-                                entity.Id = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
+                                entity.ID = Convert.ToInt32(string.IsNullOrWhiteSpace(result) ? "0" : result);
                                 count++;
                             }
                         }
