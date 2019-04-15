@@ -32,6 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -47,15 +48,22 @@
     <Compile Include="Attributes\MyTableAttribute.cs" />
     <Compile Include="Commons\AuditEntity.cs" />
     <Compile Include="Commons\BaseEntity.cs" />
+    <Compile Include="Commons\CommandInfo.cs" />
+    <Compile Include="Commons\DbHelperSQL.cs" />
     <Compile Include="Commons\DbKvs.cs" />
     <Compile Include="Commons\FullEntity.cs" />
     <Compile Include="Commons\ICreateAudit.cs" />
     <Compile Include="Commons\IEntity.cs" />
     <Compile Include="Commons\ISoftDelete.cs" />
     <Compile Include="Commons\IUpdateAudit.cs" />
+    <Compile Include="Commons\MyDbSort.cs" />
+    <Compile Include="ConditionResolver.cs" />
+    <Compile Include="Expressions\ConditionExpressionVisitor.cs" />
     <Compile Include="Expressions\ExpressionExtensions.cs" />
+    <Compile Include="Expressions\ExpressionToSql.cs" />
     <Compile Include="Expressions\IncludePropertySdrMap.cs" />
     <Compile Include="Expressions\LinqExtensions.cs" />
+    <Compile Include="Expressions\ObjectExpressionVisitor.cs" />
     <Compile Include="Expressions\SqlDataReaderConverter.cs" />
     <Compile Include="Expressions\WhereExpressionVisitor.cs" />
     <Compile Include="MyDb.cs" />
@@ -70,6 +78,7 @@
     <Compile Include="SqlBuilders\AdoExtensions.cs" />
     <Compile Include="SqlBuilders\ISqlBuilder.cs" />
     <Compile Include="SqlBuilders\SqlServerSqlBuilder.cs" />
+    <Compile Include="Updateable\MyUpdateable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

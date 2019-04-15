@@ -1,5 +1,6 @@
 namespace RM2.Model
 {
+    using MyMiniOrm.Commons;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ namespace RM2.Model
     /// <summary>
     /// ²Ëµ¥±í
     /// </summary>
-    public partial class Base_Menu
+    public partial class Base_Menu : IEntity
     {
         /// <summary>
         /// Ö÷¼üID

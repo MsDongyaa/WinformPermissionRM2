@@ -1,13 +1,11 @@
-﻿using RM2.Orm.Reflections;
+﻿using MyMiniOrm.Reflections;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
 
-namespace RM2.Orm.Expressions
+namespace MyMiniOrm.Expressions
 {
     public class SqlDataReaderConverter<T> where T : class, new()
     {
@@ -39,6 +37,36 @@ namespace RM2.Orm.Expressions
 
         #region 反射
         public T ConvertToEntity(SqlDataReader sdr)
+        {
+            var entity = new T();
+
+            foreach (var property in Master.Properties.Where(p => p.IsMap))
+            {
+                property.PropertyInfo.SetValue(entity, sdr[property.Name]);
+            }
+
+            foreach (var include in Includes)
+            {
+                var prop = Master.Properties.SingleOrDefault(p => p.Name == include);
+                if (prop != null)
+                {
+                    var subType = prop.PropertyInfo.PropertyType;
+                    var subEntityInfo = MyEntityContainer.Get(subType);
+                    var subEntity = Activator.CreateInstance(subType);
+
+                    foreach (var subProperty in subEntityInfo.Properties.Where(p => p.IsMap))
+                    {
+                        subProperty.PropertyInfo.SetValue(subEntity, sdr[$"{include}_{subProperty.Name}"]);
+                    }
+
+                    prop.PropertyInfo.SetValue(entity, subEntity);
+                }
+            }
+
+            return entity;
+        }
+
+        public T ConvertToObject(SqlDataReader sdr, List<KeyValuePair<string, string>> keyValuePairs)
         {
             var entity = new T();
 

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Unity;
+using Microsoft.Practices.Unity;
 
 namespace RM2.Test
 {
@@ -15,8 +15,8 @@ namespace RM2.Test
         {
             Console.WriteLine("控制台测试程序");
             //{
-            //    IAopBehavior aopBehavior = AopExtend.Container().Resolve<IAopBehavior>();
-            //    aopBehavior.Show();
+            IAopBehavior aopBehavior = AopExtend.Container().Resolve<>();
+            aopBehavior.Show();
             //}
 
             {

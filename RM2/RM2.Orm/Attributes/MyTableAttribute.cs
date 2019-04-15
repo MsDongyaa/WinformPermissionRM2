@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RM2.Orm.Attributes
+namespace MyMiniOrm.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class MyTableAttribute : Attribute

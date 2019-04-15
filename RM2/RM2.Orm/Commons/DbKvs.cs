@@ -2,7 +2,7 @@
 using System.Data.SqlClient;
 using System.Linq;
 
-namespace RM2.Orm.Commons
+namespace MyMiniOrm.Commons
 {
     public class DbKvs : List<KeyValuePair<string, object>>
     {

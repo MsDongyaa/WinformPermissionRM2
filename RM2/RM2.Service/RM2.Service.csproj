@@ -42,6 +42,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LogService.cs" />
+    <Compile Include="MenuService.cs" />
+    <Compile Include="RoleService.cs" />
+    <Compile Include="UserService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RM2.Framework\RM2.Framework.csproj">
+      <Project>{8D0580CC-E1E3-4D3B-BF85-62E2C069E604}</Project>
+      <Name>RM2.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RM2.IService\RM2.IService.csproj">
+      <Project>{6FF5A222-525E-4C0B-9BCB-C208D46249F5}</Project>
+      <Name>RM2.IService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RM2.Model\RM2.Model.csproj">
+      <Project>{E3A342B7-5720-4933-9FD0-658EBCE82CCC}</Project>
+      <Name>RM2.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RM2.Orm\RM2.Orm.csproj">
+      <Project>{AC9A2CF7-C2D8-4385-A66A-B8B7B9413D8E}</Project>
+      <Name>RM2.Orm</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

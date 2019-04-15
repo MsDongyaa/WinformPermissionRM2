@@ -1,10 +1,10 @@
-﻿using RM2.Orm.Attributes;
-using RM2.Orm.Commons;
+﻿using MyMiniOrm.Attributes;
+using MyMiniOrm.Commons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace RM2.Orm.Reflections
+namespace MyMiniOrm.Reflections
 {
     public class MyEntity
     {

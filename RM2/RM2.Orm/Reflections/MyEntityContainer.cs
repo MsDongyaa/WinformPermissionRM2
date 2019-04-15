@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace RM2.Orm.Reflections
+namespace MyMiniOrm.Reflections
 {
     public class MyEntityContainer
     {

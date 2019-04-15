@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace RM2.Orm.Reflections
+namespace MyMiniOrm.Reflections
 {
     public class MyProperty
     {
@@ -53,9 +53,9 @@ namespace RM2.Orm.Reflections
                         InsertIgnore = true;
                     }
                 }
-                else if (Name == "Id")
+                else if (Name == "ID")
                 {
-                    FieldName = "Id";
+                    FieldName = "ID";
                     IsKey = true;
                     InsertIgnore = true;
                     UpdateIgnore = true;
@@ -89,16 +89,16 @@ namespace RM2.Orm.Reflections
                 var foreignAttribute = property.GetForeignKeyAttribute();
                 if (foreignAttribute == null)
                 {
-                    ForeignKey = Name + "Id";
-                    MasterKey = "Id";
+                    ForeignKey = Name + "ID";
+                    MasterKey = "ID";
                 }
                 else
                 {
                     ForeignKey = string.IsNullOrWhiteSpace(foreignAttribute.ForeignKey)
-                        ? Name + "Id"
+                        ? Name + "ID"
                         : foreignAttribute.ForeignKey;
                     MasterKey = string.IsNullOrWhiteSpace(foreignAttribute.MasterKey)
-                        ? "Id"
+                        ? "ID"
                         : foreignAttribute.MasterKey;
                 }
             }

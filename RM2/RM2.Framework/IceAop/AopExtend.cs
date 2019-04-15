@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Unity;
+using Microsoft.Practices.Unity;
 
 namespace RM2.Framework.IceAop
 {

@@ -1,7 +1,7 @@
-﻿namespace RM2.Orm.Commons
+﻿namespace MyMiniOrm.Commons
 {
     public interface IEntity
     {
-        int Id { get; set; }
+        int ID { get; set; }
     }
 }

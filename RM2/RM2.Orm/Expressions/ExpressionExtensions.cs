@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace RM2.Orm.Expressions
+namespace MyMiniOrm.Expressions
 {
     public static class ExpressionExtensions
     {

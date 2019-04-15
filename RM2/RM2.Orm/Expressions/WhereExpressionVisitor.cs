@@ -1,10 +1,10 @@
-﻿using RM2.Orm.Reflections;
+﻿using MyMiniOrm.Reflections;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace RM2.Orm.Expressions
+namespace MyMiniOrm.Expressions
 {
     public class WhereExpressionVisitor<T> : ExpressionVisitor
     {
@@ -29,7 +29,7 @@ namespace RM2.Orm.Expressions
         // 参数序号，用于生成SqlParameter的Name
         private int _parameterIndex;
 
-        private string _expressionDirection;
+        private bool isBinary = false;
 
         #region 构造函数
         public WhereExpressionVisitor(string prefix = "@")
@@ -69,19 +69,19 @@ namespace RM2.Orm.Expressions
         {
             if (node == null) throw new ArgumentNullException(nameof(node));
 
-            _stringStack.Push(")");
+            isBinary = true;
 
-            _expressionDirection = "right";
+            _stringStack.Push(")");
 
             Visit(node.Right);
 
             _stringStack.Push(node.NodeType.ToSqlOperator());
 
-            _expressionDirection = "left";
-
             Visit(node.Left);
 
             _stringStack.Push("(");
+
+            isBinary = false;
 
             return node;
         }
@@ -94,30 +94,7 @@ namespace RM2.Orm.Expressions
 
                 if (rootType == ExpressionType.Parameter)
                 {
-                    if (parameterStack.Count == 2)
-                    {
-                        // 调用了导航属性
-                        var propertyName = parameterStack.Pop();
-                        var propertyFieldName = parameterStack.Pop();
-
-                        _joinProperties.Add(propertyName);
-
-                        var prop = _master.Properties.Single(p => p.Name == propertyName);
-                        var propertyEntity = MyEntityContainer.Get(prop.PropertyInfo.PropertyType);
-                        var propertyProperty = propertyEntity.Properties.Single(p => p.Name == propertyFieldName);
-
-                        _stringStack.Push($"[{propertyName}].[{propertyProperty.FieldName}]=0");
-                    }
-                    else if (parameterStack.Count == 1)
-                    {
-                        var propertyName = parameterStack.Pop();
-                        var propInfo = _master.Properties.Single(p => p.Name == propertyName);
-                        _stringStack.Push($"[{_master.TableName}].[{propInfo.FieldName}]=0");
-                    }
-                    else
-                    {
-                        throw new ArgumentException("尚未支持大于2层属性调用。如 student.Clazz.School.Id>10，请使用类似 student.Clazz.SchoolId > 0 替代");
-                    }
+                    ResolveStackToField(parameterStack);
                 }
                 else
                 {
@@ -138,30 +115,7 @@ namespace RM2.Orm.Expressions
 
             if (rootType == ExpressionType.Parameter)
             {
-                if (parameterStack.Count == 2)
-                {
-                    // 调用了导航属性
-                    var propertyName = parameterStack.Pop();
-                    var propertyFieldName = parameterStack.Pop();
-
-                    _joinProperties.Add(propertyName);
-
-                    var prop = _master.Properties.Single(p => p.Name == propertyName);
-                    var propertyEntity = MyEntityContainer.Get(prop.PropertyInfo.PropertyType);
-                    var propertyProperty = propertyEntity.Properties.Single(p => p.Name == propertyFieldName);
-
-                    _stringStack.Push($"[{propertyName}].[{propertyProperty.FieldName}]");
-                }
-                else if (parameterStack.Count == 1)
-                {
-                    var propertyName = parameterStack.Pop();
-                    var propInfo = _master.Properties.Single(p => p.Name == propertyName);
-                    _stringStack.Push($"[{_master.TableName}].[{propInfo.FieldName}]");
-                }
-                else
-                {
-                    throw new ArgumentException("尚未支持大于2层属性调用。如 student.Clazz.School.Id>10，请使用类似 student.Clazz.SchoolId > 0 替代");
-                }
+                ResolveStackToField(parameterStack);
             }
             else
             {
@@ -179,18 +133,11 @@ namespace RM2.Orm.Expressions
 
             var parameterName = $"{_prefix}__p_{_parameterIndex++}";
             var value = ResolveValue(node.Value);
-            if (value.ToString() == "1=1" || value.ToString() == "1=0")
-            {
-                _stringStack.Push($" {value} ");
-            }
-            else
-            {
-                _parameters.Add(new KeyValuePair<string, object>(parameterName, value));
-                _stringStack.Push($" {parameterName} ");
-            }
+            
+            _parameters.Add(new KeyValuePair<string, object>(parameterName, value));
+            _stringStack.Push($" {parameterName} ");
             return node;
         }
-
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
@@ -208,6 +155,10 @@ namespace RM2.Orm.Expressions
                 {
                     format = "({0} LIKE {1})";
                 }
+                else if(node.Method.Name == "IgnoreExpression")
+                {
+                    return node;
+                }
                 else
                 {
                     throw new NotSupportedException($"不受支持的方法调用 {node.Method.Name}");
@@ -222,6 +173,14 @@ namespace RM2.Orm.Expressions
                 var right = _stringStack.Pop();
                 var left = _stringStack.Pop();
                 _stringStack.Push(string.Format(format, left, right));
+            }
+            else if (node.Method.Name == "DefaultTrue")
+            {
+                _stringStack.Push("1=1");
+            }
+            else if (node.Method.Name == "DefaultFalse")
+            {
+                _stringStack.Push("1=0");
             }
             else
             {
@@ -239,14 +198,6 @@ namespace RM2.Orm.Expressions
         #region 辅助方法
         private object ResolveValue(object obj)
         {
-            if (_expressionDirection == "left")
-            {
-                if (obj is bool b)
-                {
-                    return b ? "1=1" : "1=0";
-                }
-            }
-
             switch (_tempMethod)
             {
                 case "Contains":
@@ -262,6 +213,34 @@ namespace RM2.Orm.Expressions
 
             _tempMethod = "";
             return obj;
+        }
+
+        private void ResolveStackToField(Stack<string> parameterStack)
+        {
+            if (parameterStack.Count == 2)
+            {
+                // 调用了导航属性
+                var propertyName = parameterStack.Pop();
+                var propertyFieldName = parameterStack.Pop();
+
+                _joinProperties.Add(propertyName);
+
+                var prop = _master.Properties.Single(p => p.Name == propertyName);
+                var propertyEntity = MyEntityContainer.Get(prop.PropertyInfo.PropertyType);
+                var propertyProperty = propertyEntity.Properties.Single(p => p.Name == propertyFieldName);
+
+                _stringStack.Push($"[{propertyName}].[{propertyProperty.FieldName}]");
+            }
+            else if (parameterStack.Count == 1)
+            {
+                var propertyName = parameterStack.Pop();
+                var propInfo = _master.Properties.Single(p => p.Name == propertyName);
+                _stringStack.Push($"[{_master.TableName}].[{propInfo.FieldName}]");
+            }
+            else
+            {
+                throw new ArgumentException("尚未支持大于2层属性调用。如 student.Clazz.School.Id>10，请使用类似 student.Clazz.SchoolId > 0 替代");
+            }
         }
         #endregion
     }

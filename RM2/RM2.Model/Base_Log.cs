@@ -1,5 +1,6 @@
 namespace RM2.Model
 {
+    using MyMiniOrm.Commons;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ namespace RM2.Model
     /// <summary>
     /// 系统日志表
     /// </summary>
-    public partial class Base_Log
+    public partial class Base_Log: IEntity
     {
         /// <summary>
         /// 主键ID
