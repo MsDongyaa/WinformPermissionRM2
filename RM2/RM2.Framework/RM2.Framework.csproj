@@ -83,6 +83,7 @@
     <None Include="Ice\AOP实现文档及调用.docx" />
     <None Include="packages.config" />
     <None Include="Seven\本地日志以及序列化使用.docx" />
+    <None Include="本地日志以及序列化使用.docx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
