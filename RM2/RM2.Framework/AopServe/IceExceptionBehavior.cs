@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Unity.Interception.InterceptionBehaviors;
 using Unity.Interception.PolicyInjection.Pipeline;
 
-namespace RM2.Framework.IceAop
+namespace RM2.Framework.AopServe
 {
     public class IceExceptionBehavior : IInterceptionBehavior
     {

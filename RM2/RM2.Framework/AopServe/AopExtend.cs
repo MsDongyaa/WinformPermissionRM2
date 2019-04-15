@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Unity;
 using Microsoft.Practices.Unity;
 
-namespace RM2.Framework.IceAop
+namespace RM2.Framework.AopServe
 {
     public static class AopExtend
     {

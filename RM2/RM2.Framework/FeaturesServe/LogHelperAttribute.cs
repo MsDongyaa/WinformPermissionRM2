@@ -5,12 +5,12 @@ using System.Text;
 using System.IO;
 using System.Configuration;
 
-namespace FrameWork
+namespace FrameWork.FeaturesServe
 {
-    public class LogHelper
+    public  class LogHelperAttribute : Attribute
     {
-        public static string LogPath = ConfigurationManager.AppSettings["LogPath"];
-        public static void Write(string logString)
+        public  string LogPath = ConfigurationManager.AppSettings["LogPath"];
+        public  void Write(string logString)
         {
             if (!Directory.Exists(LogPath))
             {

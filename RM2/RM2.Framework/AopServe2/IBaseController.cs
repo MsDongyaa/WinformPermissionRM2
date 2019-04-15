@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RM2.Framework.IceFilterAop
+namespace RM2.Framework.AopServe2
 {
-   public interface IOrderService
+    /// <summary>
+    /// 空接口
+    /// </summary>
+    public interface IBaseController
     {
-        void Index(int id,string name);
+
     }
 }

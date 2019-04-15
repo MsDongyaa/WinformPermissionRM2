@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RM2.Framework.IceAop
+namespace RM2.Framework.AopServe
 {
    public class TestAopBehavior: IAopBehavior
     {

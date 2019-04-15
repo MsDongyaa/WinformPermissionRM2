@@ -5,8 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
+using FrameWork;
+using FrameWork.FeaturesServe;
 
-namespace RM2.Framework.IceFilterAop
+namespace RM2.Framework.AopServe2
 {
     public static class AOPManager
     {
@@ -52,11 +54,11 @@ namespace RM2.Framework.IceFilterAop
             //获取方法名
             var method = type.GetMethod(methodName);
             //检测该方法是否调用日志特性
-            if (method.IsDefined(typeof(LogFilterAttribute),true)) 
+            if (method.IsDefined(typeof(LogHelperAttribute),true)) 
             {
-              var attribute=  (LogFilterAttribute)method.GetCustomAttribute(typeof(LogFilterAttribute), true);
+              var attribute=  (LogHelperAttribute)method.GetCustomAttribute(typeof(LogHelperAttribute), true);
                 //写个日志
-               attribute.Show();
+                attribute.Write("写个日志");
             }
             //其他操作
             method.Invoke(oService,paramters);

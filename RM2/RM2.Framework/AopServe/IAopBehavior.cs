@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RM2.Framework.IceAop
+namespace RM2.Framework.AopServe
 {
     /// <summary>
     /// 创建时间：2019-04-02

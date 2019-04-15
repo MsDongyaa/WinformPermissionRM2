@@ -1,5 +1,4 @@
 ﻿
-using RM2.Framework.IceAop;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +11,7 @@ using System.Windows.Forms;
 using Microsoft.Practices.Unity;
 using Unity;
 using RM2.IService;
+using RM2.Framework.AopServe;
 
 namespace RM2.WinForm
 {

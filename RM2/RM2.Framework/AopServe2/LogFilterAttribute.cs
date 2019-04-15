@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RM2.Framework.IceFilterAop
+namespace RM2.Framework.AopServe2
 {
    public class LogFilterAttribute:Attribute
     {

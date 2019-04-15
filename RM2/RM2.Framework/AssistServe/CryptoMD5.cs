@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RM2.Framework.Ice
+namespace RM2.Framework.AssisServe
 {
     /// <summary>
     /// 加密/解密
